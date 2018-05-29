@@ -27,8 +27,7 @@ class S(BaseHTTPRequestHandler):
         
         dropbox_access_token = "0NjyWU0eglkAAAAAAAAdi_BBUnA0DCG5YmxTmJjrxyLDsjpOb_0V9f7R3v0uEwA0"
         client = dropbox.Dropbox(dropbox_access_token)
-        timestamp = datetime.datetime.now()
-        ts = timestamp.strftime("%y%m%d-%H%M%S")
+        ts = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
         
         print("[UPLOAD] {}.json".format(ts))
         dropbox_base = "Thingsee_data"
