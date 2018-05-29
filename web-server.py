@@ -8,7 +8,6 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socketserver
-import simplejson
 import datetime
 import dropbox
 import json
@@ -26,18 +25,15 @@ class S(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         
-        dropbox_access_token = "0NjyWU0eglkAAAAAAAAdi_BBUnA0DCG5YmxTmJjrxyLDsjpOb_0V9f7R3v0uEwA0"
-        client = dropbox.Dropbox(dropbox_access_token)
-        ts = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
         config = json.load(open("config.json"))
         client = dropbox.Dropbox(config["dropbox_access_token"])
         dropbox_base = config["dropbox_base_path"]
         
-        print("[UPLOAD] {}.json".format(ts))
-        dropbox_base = "Thingsee_data"
+        ts = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
         path = "/{base_path}/{timestamp}.json".format(base_path=dropbox_base, timestamp=ts)
 
         client.files_upload(self.data_string, path)
+        print("[UPLOAD] {}.json".format(ts))
         
         return
         
@@ -48,10 +44,6 @@ def run(server_class=HTTPServer, handler_class=S, port=8082):
     httpd.serve_forever()
 
 if __name__ == "__main__":
-    from sys import argv
+    from sys import argv  
+    run()
 
-    if len(argv) == 2:
-        run(port=int(argv[1]))
-    else:
-        run()
-        
