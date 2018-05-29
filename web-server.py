@@ -3,17 +3,8 @@
 Very simple HTTP server in python.
 
 Usage::
-    ./dummy-web-server.py [<port>]
-
-Send a GET request::
-    curl http://localhost
-
-Send a HEAD request::
-    curl -I http://localhost
-
-Send a POST request::
-    curl -d "foo=bar&bin=baz" http://localhost
-
+    ./web-server.py
+    
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socketserver
@@ -49,7 +40,7 @@ class S(BaseHTTPRequestHandler):
         
         return
         
-def run(server_class=HTTPServer, handler_class=S, port=80):
+def run(server_class=HTTPServer, handler_class=S, port=8082):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...')
