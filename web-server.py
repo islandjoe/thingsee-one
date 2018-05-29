@@ -11,6 +11,7 @@ import socketserver
 import simplejson
 import datetime
 import dropbox
+import json
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -28,6 +29,9 @@ class S(BaseHTTPRequestHandler):
         dropbox_access_token = "0NjyWU0eglkAAAAAAAAdi_BBUnA0DCG5YmxTmJjrxyLDsjpOb_0V9f7R3v0uEwA0"
         client = dropbox.Dropbox(dropbox_access_token)
         ts = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
+        config = json.load(open("config.json"))
+        client = dropbox.Dropbox(config["dropbox_access_token"])
+        dropbox_base = config["dropbox_base_path"]
         
         print("[UPLOAD] {}.json".format(ts))
         dropbox_base = "Thingsee_data"
