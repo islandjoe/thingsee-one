@@ -17,6 +17,11 @@ Send a POST request::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socketserver
+import simplejson
+
+import datetime
+import dropbox
+import base64
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -24,17 +29,25 @@ class S(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
-    def do_GET(self):
-        self._set_headers()
-        self.wfile.write(b"<html><body><h1>hi!</h1></body></html>")
-
-    def do_HEAD(self):
-        self._set_headers()
-        
     def do_POST(self):
-        # Doesn't do anything with posted data
         self._set_headers()
-        self.wfile.write(b"<html><body><h1>POST!</h1></body></html>")
+        self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+        
+        self.send_response(200)
+        self.end_headers()
+        
+        dropbox_access_token = "0NjyWU0eglkAAAAAAAAdi_BBUnA0DCG5YmxTmJjrxyLDsjpOb_0V9f7R3v0uEwA0"
+        client = dropbox.Dropbox(dropbox_access_token)
+        timestamp = datetime.datetime.now()
+        ts = timestamp.strftime("%y%m%d-%H%M%S")
+        
+        print("[UPLOAD] {}.json".format(ts))
+        dropbox_base = "Thingsee_data"
+        path = "/{base_path}/{timestamp}.json".format(base_path=dropbox_base, timestamp=ts)
+
+        client.files_upload(self.data_string, path)
+        
+        return
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
     server_address = ('', port)
