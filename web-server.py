@@ -9,10 +9,8 @@ Usage::
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socketserver
 import simplejson
-
 import datetime
 import dropbox
-import base64
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
